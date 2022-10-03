@@ -1,0 +1,62 @@
+<title><%=title%></title>
+
+<html>
+    <body>
+        <head>
+            <link rel="stylesheet" href="/style.css">
+            <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0"/>
+        </head>
+        <div class="App">
+            <div class="short-container">
+                <h1>URL SHORTENER!</h1>
+                <input type="text" id="urlbox" name="urlbox" placeholder="SUA URL AQUI">
+                <input type="submit" value="Submit" onclick="short()">
+            </div>
+        </div>
+    </body>
+</html>
+
+
+<script>
+
+    let timeout = false;
+
+    function short() {
+
+        timeout = true;
+
+        let url = document.getElementById("urlbox").value;
+
+        if(!url.startsWith("https://") && !url.startsWith("http://")) return document.getElementById("urlbox").value = "";
+
+        if(url == null || url == "") return document.getElementById("urlbox").value = "";
+
+        fetch(`/api/v1/short`, {
+            method: "POST",
+            mode: "same-origin",
+            body: JSON.stringify({url: url}),
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        }).then(async(res) => {
+
+            let status = await res.status;
+
+            console.log(status);
+
+            if(status != 200) return alert("Ocorreu um erro, tente novamente mais tarde.");
+
+            let response = await res.text();
+
+            response = JSON.parse(response);
+
+            document.getElementById("urlbox").value = `localhost:3000/` + response.url;
+
+        })
+
+        setTimeout(() => {timeout = false}, 2000)
+
+    }
+
+</script>
