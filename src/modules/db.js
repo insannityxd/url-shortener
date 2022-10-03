@@ -3,7 +3,6 @@ require("dotenv").config();
 const firebase = require("firebase");
 
 const gen = require("../utils/generate.js").gen;
-const base64 = require("../utils/base64.js");
 
 function initialize() {
 
