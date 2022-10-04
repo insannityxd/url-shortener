@@ -23,6 +23,8 @@
 
     function short() {
 
+        if(timeout == true) return;
+
         timeout = true;
 
         let url = document.getElementById("urlbox").value;
